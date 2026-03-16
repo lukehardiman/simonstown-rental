@@ -93,7 +93,7 @@ export async function createEnquiry(data: {
   departureDate?: string
   guests?: number
   property?: string
-  source?: string
+  source?: 'website' | 'google' | 'referral' | 'other'
 }) {
   const payload = await getPayloadClient()
   return payload.create({
