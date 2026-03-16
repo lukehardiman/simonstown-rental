@@ -10,9 +10,17 @@ const navigation = [
   { label: 'Contact', href: '/contact' },
 ]
 
-export function Header() {
+type HeaderProps = {
+  variant?: 'transparent' | 'light'
+}
+
+export function Header({ variant = 'transparent' }: HeaderProps) {
   const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
+
+  // Dark text/bg whenever the page has a light background (variant='light')
+  // or the user has scrolled past the hero
+  const isLight = variant === 'light' || scrolled
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40)
@@ -30,7 +38,7 @@ export function Header() {
     <header
       className={`
         fixed top-0 inset-x-0 z-50 transition-all duration-500 ease-smooth
-        ${scrolled
+        ${isLight
           ? 'bg-stone-50/95 backdrop-blur-md shadow-sm'
           : 'bg-transparent'
         }
@@ -42,10 +50,10 @@ export function Header() {
           href="/"
           className="relative z-50 font-display text-fluid-lg tracking-display"
         >
-          <span className={`transition-colors duration-500 ${scrolled ? 'text-navy-950' : 'text-white'} ${menuOpen ? 'text-navy-950' : ''}`}>
+          <span className={`transition-colors duration-500 ${isLight || menuOpen ? 'text-navy-950' : 'text-white'}`}>
             Simon&rsquo;s Town
           </span>
-          <span className={`block text-[0.65em] font-body font-light tracking-wide-caps uppercase transition-colors duration-500 ${scrolled ? 'text-sea-600' : 'text-sea-200'} ${menuOpen ? 'text-sea-600' : ''}`}>
+          <span className={`block text-[0.65em] font-body font-light tracking-wide-caps uppercase transition-colors duration-500 ${isLight || menuOpen ? 'text-sea-600' : 'text-sea-200'}`}>
             Rental
           </span>
         </Link>
@@ -58,7 +66,7 @@ export function Header() {
               href={item.href}
               className={`
                 text-fluid-sm font-medium tracking-wide transition-colors duration-300
-                ${scrolled
+                ${isLight
                   ? 'text-navy-700 hover:text-sea-600'
                   : 'text-white/90 hover:text-white'
                 }
@@ -81,11 +89,11 @@ export function Header() {
         >
           <span
             className={`block w-6 h-0.5 transition-all duration-300 ease-smooth
-              ${menuOpen ? 'rotate-45 translate-y-1 bg-navy-950' : scrolled ? 'bg-navy-950' : 'bg-white'}`}
+              ${menuOpen ? 'rotate-45 translate-y-1 bg-navy-950' : isLight ? 'bg-navy-950' : 'bg-white'}`}
           />
           <span
             className={`block w-6 h-0.5 transition-all duration-300 ease-smooth
-              ${menuOpen ? '-rotate-45 -translate-y-1 bg-navy-950' : scrolled ? 'bg-navy-950' : 'bg-white'}`}
+              ${menuOpen ? '-rotate-45 -translate-y-1 bg-navy-950' : isLight ? 'bg-navy-950' : 'bg-white'}`}
           />
         </button>
       </div>
