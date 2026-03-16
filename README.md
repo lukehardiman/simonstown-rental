@@ -1,67 +1,165 @@
-# Payload Blank Template
+# Simon's Town Rental
 
-This template comes configured with the bare minimum to get started on anything you need.
+Boutique holiday accommodation website for Simon's Town, Cape Peninsula — built on Payload CMS 3.x + Next.js 15.
 
-## Quick start
+## Quick Start
 
-This template can be deployed directly from our Cloud hosting and it will setup MongoDB and cloud S3 object storage for media.
+### Prerequisites
+- Node.js 20+
+- MongoDB (local or Atlas)
+- pnpm (recommended) or npm
 
-## Quick Start - local setup
+### Setup
 
-To spin up this template locally, follow these steps:
+```bash
+# Clone and install
+git clone [repo-url] simonstown-rental
+cd simonstown-rental
+pnpm install
 
-### Clone
+# Configure environment
+cp .env.example .env
+# Edit .env with your MongoDB URI and a secure PAYLOAD_SECRET
 
-After you click the `Deploy` button above, you'll want to have standalone copy of this repo on your machine. If you've already cloned this repo, skip to [Development](#development).
+# Start development
+pnpm dev
+```
 
-### Development
+The site runs at `http://localhost:3000` and the Payload admin at `http://localhost:3000/admin`.
 
-1. First [clone the repo](#clone) if you have not done so already
-2. `cd my-project && cp .env.example .env` to copy the example environment variables. You'll need to add the `MONGODB_URL` from your Cloud project to your `.env` if you want to use S3 storage and the MongoDB database that was created for you.
+On first visit to `/admin`, you'll be prompted to create your admin user.
 
-3. `pnpm install && pnpm dev` to install dependencies and start the dev server
-4. open `http://localhost:3000` to open the app in your browser
+---
 
-That's it! Changes made in `./src` will be reflected in your app. Follow the on-screen instructions to login and create your first admin user. Then check out [Production](#production) once you're ready to build and serve your app, and [Deployment](#deployment) when you're ready to go live.
+## Architecture
 
-#### Docker (Optional)
+### Tech Stack
+- **CMS**: Payload CMS 3.x (headless, runs inside Next.js)
+- **Framework**: Next.js 15 (App Router, React Server Components)
+- **Styling**: Tailwind CSS with custom design tokens
+- **Database**: MongoDB
+- **Deployment**: Vercel (planned)
+- **Image optimisation**: Sharp + Next.js Image component
+- **SEO**: Payload SEO plugin + JSON-LD structured data
 
-If you prefer to use Docker for local development instead of a local MongoDB instance, the provided docker-compose.yml file can be used.
+### Project Structure
 
-To do so, follow these steps:
+```
+src/
+├── app/
+│   ├── (frontend)/      # Public-facing pages (Next.js App Router)
+│   │   ├── layout.tsx   # Root layout with fonts, metadata, structured data
+│   │   └── page.tsx     # Homepage
+│   ├── (payload)/       # Payload CMS admin routes (don't touch)
+│   └── api/
+│       └── enquiry/     # Form submission endpoint
+│
+├── collections/         # Payload CMS content types
+│   ├── Properties.ts    # Rental property listings
+│   ├── PropertyImages.ts # Optimised property photo uploads
+│   ├── AreaGuide.ts     # Peninsula attractions, restaurants, activities
+│   ├── Pages.ts         # Static content (History, Family, etc.)
+│   ├── Media.ts         # General site media
+│   ├── Enquiries.ts     # Booking form submissions
+│   └── Users.ts         # CMS admin users
+│
+├── globals/
+│   └── SiteSettings.ts  # Site-wide config (contact, SEO defaults, etc.)
+│
+├── components/
+│   ├── layout/          # Header, Footer
+│   ├── sections/        # Page section components
+│   ├── forms/           # EnquiryForm
+│   └── ui/              # Buttons, cards, shared UI
+│
+├── lib/
+│   ├── payload.ts       # Data access utilities
+│   └── utils.ts         # className merger (cn)
+│
+├── hooks/               # React hooks (scroll animation, etc.)
+├── styles/
+│   └── globals.css      # Tailwind + custom CSS
+│
+└── payload.config.ts    # Main Payload CMS configuration
+```
 
-- Modify the `MONGODB_URL` in your `.env` file to `mongodb://127.0.0.1/<dbname>`
-- Modify the `docker-compose.yml` file's `MONGODB_URL` to match the above `<dbname>`
-- Run `docker-compose up` to start the database, optionally pass `-d` to run in the background.
+### Collections Overview
 
-## How it works
+| Collection | Purpose | Public | Notes |
+|---|---|---|---|
+| Properties | Rental listings with gallery, amenities, pricing | ✓ | Core content type |
+| Property Images | Optimised uploads with thumbnail/card/hero/OG sizes | ✓ | Auto-generates responsive sizes |
+| Area Guide | Peninsula attractions by category & area | ✓ | Dining, nature, history, etc. |
+| Pages | Static content pages | ✓ | Supports story/contact/landing templates |
+| Media | General site images | ✓ | |
+| Enquiries | Booking form submissions | Admin only | Email notification TODO |
+| Users | CMS admin accounts | Admin only | |
 
-The Payload config is tailored specifically to the needs of most websites. It is pre-configured in the following ways:
+### Design System
 
-### Collections
+Custom colour palette in `tailwind.config.ts`:
+- **Sea** — Primary ocean blue (`sea-500: #2e91a5`)
+- **Stone** — Warm neutral backgrounds (`stone-50: #faf8f5`)
+- **Fynbos** — Warm terracotta accent (`fynbos-500: #de742d`)
+- **Navy** — Deep text colour (`navy-950: #1a2234`)
 
-See the [Collections](https://payloadcms.com/docs/configuration/collections) docs for details on how to extend this functionality.
+Typography: Playfair Display (display) + Libre Franklin (body). Fluid type scale using `clamp()`.
 
-- #### Users (Authentication)
+---
 
-  Users are auth-enabled collections that have access to the admin panel.
+## Pages to Build
 
-  For additional help, see the official [Auth Example](https://github.com/payloadcms/payload/tree/main/examples/auth) or the [Authentication](https://payloadcms.com/docs/authentication/overview#authentication-overview) docs.
+### MVP (Phase 1)
+1. **Home** — Hero, property highlight, area teaser, family story teaser, CTA ✅
+2. **The House** — Full property detail with gallery, amenities, pricing, map
+3. **Area Guide** — Filterable grid of peninsula highlights
+4. **History of Simon's Town** — Story-format page with rich text
+5. **The Hardiman Family** — Story-format family history page
+6. **Contact** — Enquiry form + contact details + map
 
-- #### Media
+### Phase 2
+- Second property listing
+- Enhanced area guide with individual detail pages
+- Availability calendar
+- Guest reviews/testimonials
+- Blog / local journal
 
-  This is the uploads enabled collection. It features pre-configured sizes, focal point and manual resizing to help you manage your pictures.
+---
 
-### Docker
+## Working with Claude Code
 
-Alternatively, you can use [Docker](https://www.docker.com) to spin up this template locally. To do so, follow these steps:
+### Key Implementation Notes
 
-1. Follow [steps 1 and 2 from above](#development), the docker-compose file will automatically use the `.env` file in your project root
-1. Next run `docker-compose up`
-1. Follow [steps 4 and 5 from above](#development) to login and create your first admin user
+- All frontend pages live under `src/app/(frontend)/` — Payload admin is at `src/app/(payload)/`
+- Use `getPayloadClient()` from `src/lib/payload.ts` for all data fetching in Server Components
+- Images use Next.js `<Image>` component — PropertyImages collection auto-generates responsive sizes
+- The enquiry form POSTs to `/api/enquiry` which creates a Payload document
+- SEO metadata is managed per-page through Payload's SEO plugin fields
 
-That's it! The Docker instance will help you get up and running quickly while also standardizing the development environment across your teams.
+### Performance Targets
+- Lighthouse Performance: 95+
+- LCP: < 2.5s
+- CLS: < 0.1
+- All images served as AVIF/WebP via Next.js
+- Font loading: `display: swap` with preload
 
-## Questions
+---
 
-If you have any issues or questions, reach out to us on [Discord](https://discord.com/invite/payload) or start a [GitHub discussion](https://github.com/payloadcms/payload/discussions).
+## Deployment
+
+Target: Vercel + MongoDB Atlas
+
+```bash
+# Build
+pnpm build
+
+# Environment variables needed in Vercel:
+# MONGODB_URI, PAYLOAD_SECRET, NEXT_PUBLIC_SITE_URL
+```
+
+---
+
+## Credits
+
+Design & Development: Luke Hardiman
+Domain: simonstownrental.com
