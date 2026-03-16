@@ -29,7 +29,7 @@ export function Footer() {
               Explore
             </h3>
             <nav className="flex flex-col gap-3" aria-label="Footer navigation">
-              <Link href="/property" className="text-sm hover:text-sea-300 transition-colors">
+              <Link href="/property/thomas-street-house" className="text-sm hover:text-sea-300 transition-colors">
                 The House
               </Link>
               <Link href="/area-guide" className="text-sm hover:text-sea-300 transition-colors">
