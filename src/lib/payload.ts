@@ -1,4 +1,5 @@
 import { getPayload } from 'payload'
+import type { Where } from 'payload'
 import config from '@payload-config'
 
 export async function getPayloadClient() {
@@ -41,7 +42,7 @@ export async function getProperties() {
  */
 export async function getAreaGuide(category?: string) {
   const payload = await getPayloadClient()
-  const where: Record<string, unknown> = { status: { equals: 'published' } }
+  const where: Where = { status: { equals: 'published' } }
   if (category) {
     where.category = { equals: category }
   }
