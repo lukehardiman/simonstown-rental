@@ -58,10 +58,6 @@
   img {
     @apply transition-opacity duration-500;
   }
-
-  img[loading] {
-    opacity: 0;
-  }
 }
 
 @layer components {

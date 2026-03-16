@@ -6,6 +6,8 @@ import { RichText } from '@payloadcms/richtext-lexical/react'
 
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
+import { GalleryWithLightbox } from '@/components/ui/Lightbox'
+import type { LightboxImage } from '@/components/ui/Lightbox'
 import { getPropertyBySlug, getProperties } from '@/lib/payload'
 import type { Media, PropertyImage } from '@/payload-types'
 
@@ -153,6 +155,23 @@ export default async function PropertyPage({ params }: Props) {
     }),
   }
 
+  // ── Gallery images (resolved server-side, passed to client component) ────────
+
+  const galleryImages: LightboxImage[] = (property.gallery ?? [])
+    .map((item, i) => {
+      const img = isPropertyImage(item.image) ? item.image : null
+      const src = img?.sizes?.card?.url ?? img?.url
+      if (!src) return null
+      return {
+        src,
+        fullSrc: img?.sizes?.hero?.url ?? src,
+        alt: item.caption ?? img?.alt ?? property.title,
+        caption: item.caption ?? undefined,
+        isFeature: i === 0,
+      }
+    })
+    .filter((img): img is LightboxImage => img !== null)
+
   // ── Render ─────────────────────────────────────────────────────────────────
 
   return (
@@ -227,45 +246,11 @@ export default async function PropertyPage({ params }: Props) {
         </div>
 
         {/* ═══════ GALLERY ═══════ */}
-        {property.gallery && property.gallery.length > 0 && (
+        {galleryImages.length > 0 && (
           <section className="section-padding-sm bg-stone-50">
             <div className="container-site">
               <h2 className="text-fluid-2xl mb-8">Gallery</h2>
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
-                {property.gallery.map((item, i) => {
-                  const img = isPropertyImage(item.image) ? item.image : null
-                  const src = img?.sizes?.card?.url ?? img?.url
-                  if (!src) return null
-
-                  const isFeature = i === 0
-
-                  return (
-                    <div
-                      key={item.id ?? i}
-                      className={`relative overflow-hidden rounded-lg bg-stone-200 ${
-                        isFeature ? 'col-span-2 row-span-2 aspect-square' : 'aspect-square'
-                      }`}
-                    >
-                      <Image
-                        src={isFeature ? (img?.sizes?.hero?.url ?? src) : src}
-                        alt={item.caption ?? img?.alt ?? property.title}
-                        fill
-                        className="object-cover transition-transform duration-500 hover:scale-[1.03]"
-                        sizes={
-                          isFeature
-                            ? '(max-width: 768px) 100vw, 50vw'
-                            : '(max-width: 768px) 50vw, 25vw'
-                        }
-                      />
-                      {item.caption && (
-                        <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-navy-950/60 to-transparent p-3 pointer-events-none">
-                          <p className="text-white text-xs">{item.caption}</p>
-                        </div>
-                      )}
-                    </div>
-                  )
-                })}
-              </div>
+              <GalleryWithLightbox images={galleryImages} />
             </div>
           </section>
         )}
