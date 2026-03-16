@@ -44,9 +44,28 @@ export default buildConfig({
     ...(process.env.S3_BUCKET
       ? [
           s3Storage({
+            // generateFileURL is set per-collection when S3_PUBLIC_URL is present.
+            // This separates the R2 public serving URL (pub-xxx.r2.dev) from the
+            // S3-compatible API endpoint used for uploads (accountId.r2.cloudflarestorage.com).
+            // Without this, the adapter's built-in generateURL would embed the API
+            // endpoint hostname in stored URLs, making them inaccessible publicly.
             collections: {
-              media: true,
-              'property-images': true,
+              media: process.env.S3_PUBLIC_URL
+                ? {
+                    generateFileURL: ({ filename, prefix }) => {
+                      const base = process.env.S3_PUBLIC_URL!.replace(/\/$/, '')
+                      return prefix ? `${base}/${prefix}/${filename}` : `${base}/${filename}`
+                    },
+                  }
+                : true,
+              'property-images': process.env.S3_PUBLIC_URL
+                ? {
+                    generateFileURL: ({ filename, prefix }) => {
+                      const base = process.env.S3_PUBLIC_URL!.replace(/\/$/, '')
+                      return prefix ? `${base}/${prefix}/${filename}` : `${base}/${filename}`
+                    },
+                  }
+                : true,
             },
             bucket: process.env.S3_BUCKET,
             config: {
@@ -54,8 +73,11 @@ export default buildConfig({
                 accessKeyId: process.env.S3_ACCESS_KEY_ID || '',
                 secretAccessKey: process.env.S3_SECRET_ACCESS_KEY || '',
               },
-              region: process.env.S3_REGION || 'us-east-1',
+              region: process.env.S3_REGION || 'auto',
+              // S3_ENDPOINT: the R2 account API endpoint for upload/delete operations.
+              // e.g. https://<accountId>.r2.cloudflarestorage.com
               ...(process.env.S3_ENDPOINT && { endpoint: process.env.S3_ENDPOINT }),
+              forcePathStyle: true,
             },
           }),
         ]

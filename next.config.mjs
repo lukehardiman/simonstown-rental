@@ -9,6 +9,10 @@ const nextConfig = {
         hostname: 'localhost',
         port: '3000',
       },
+      {
+        protocol: 'https',
+        hostname: 'pub-fbf75dec72f046f39fca797f3a38ebed.r2.dev',
+      },
     ],
   },
   webpack: (webpackConfig) => {
