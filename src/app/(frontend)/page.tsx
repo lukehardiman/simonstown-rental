@@ -72,7 +72,7 @@ export default async function HomePage() {
             <div className="absolute inset-0 bg-navy-950/0 z-10" />
             {hero?.url ? (
               <Image
-                src={hero.sizes?.hero?.url ?? hero.url}
+                src={hero.sizes?.large?.url ?? hero.url}
                 alt={hero.alt}
                 fill
                 className="object-cover"
