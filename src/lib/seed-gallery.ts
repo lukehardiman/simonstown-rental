@@ -1,5 +1,5 @@
 /**
- * Seed script — uploads property images for 13 Thomas Street.
+ * Seed script — uploads property images for Thomas Street House.
  *
  * Usage:
  *   pnpm seed:gallery
@@ -8,7 +8,7 @@
  *   1. Deletes all existing property-images documents
  *   2. Reads all JPGs from public/images/property/13-thomas-street/ (sorted numerically)
  *   3. Uploads each as a PropertyImage via Payload local API (triggers image-size generation)
- *   4. Updates the 13-thomas-street property's gallery with all uploaded image IDs
+ *   4. Updates the thomas-street-house property's gallery with all uploaded image IDs
  */
 
 import 'dotenv/config'
@@ -23,7 +23,7 @@ const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
 const IMAGES_DIR = path.resolve(__dirname, '../../public/images/property/13-thomas-street')
-const PROPERTY_SLUG = '13-thomas-street-simonstown'
+const PROPERTY_SLUG = 'thomas-street-house'
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 

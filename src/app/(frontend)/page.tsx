@@ -50,7 +50,7 @@ export default function HomePage() {
                 the wild beauty of Cape Point — all on your doorstep.
               </p>
               <div className="flex flex-wrap gap-4">
-                <Link href="/property" className="btn-primary">
+                <Link href="/property/thomas-street-house" className="btn-primary">
                   View the House
                 </Link>
                 <Link href="/contact" className="btn border-2 border-white text-white hover:bg-white hover:text-navy-950">
@@ -150,7 +150,7 @@ export default function HomePage() {
                   </div>
                 </div>
 
-                <Link href="/property" className="btn-secondary">
+                <Link href="/property/thomas-street-house" className="btn-secondary">
                   Full Property Details
                 </Link>
               </div>
@@ -262,7 +262,7 @@ export default function HomePage() {
                 Make an Enquiry
               </Link>
               <Link
-                href="/property"
+                href="/property/thomas-street-house"
                 className="btn border-2 border-white text-white hover:bg-white/10"
               >
                 View the House
