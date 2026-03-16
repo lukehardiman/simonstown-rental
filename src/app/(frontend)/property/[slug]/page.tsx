@@ -227,7 +227,7 @@ export default async function PropertyPage({ params }: Props) {
         </section>
 
         {/* ═══════ SPECS BAR ═══════ */}
-        <div className="bg-white border-b border-stone-200 sticky top-[var(--header-height)] z-30 shadow-sm">
+        <div className="bg-white border-b border-stone-200 sticky top-[var(--header-height)] z-20 shadow-sm">
           <div className="container-site">
             <div className="flex items-center gap-8 md:gap-12 py-4 overflow-x-auto">
               <SpecItem label="Bedrooms" value={details.bedrooms} />

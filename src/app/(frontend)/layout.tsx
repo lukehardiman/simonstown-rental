@@ -45,6 +45,10 @@ export const metadata: Metadata = {
 export default function FrontendLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${fontDisplay.variable} ${fontBody.variable}`}>
+      <head>
+        <link rel="icon" href="/icon.svg" type="image/svg+xml" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+      </head>
       <body>
         {children}
       </body>
