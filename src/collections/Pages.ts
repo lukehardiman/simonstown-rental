@@ -1,4 +1,5 @@
 import type { CollectionConfig } from 'payload'
+import { revalidatePage } from '@/hooks/revalidate'
 
 export const Pages: CollectionConfig = {
   slug: 'pages',
@@ -13,6 +14,9 @@ export const Pages: CollectionConfig = {
   },
   access: {
     read: () => true,
+  },
+  hooks: {
+    afterChange: [revalidatePage],
   },
   fields: [
     {

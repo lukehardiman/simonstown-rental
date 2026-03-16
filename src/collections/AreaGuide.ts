@@ -1,4 +1,5 @@
 import type { CollectionConfig } from 'payload'
+import { revalidateAreaGuide } from '@/hooks/revalidate'
 
 export const AreaGuide: CollectionConfig = {
   slug: 'area-guide',
@@ -13,6 +14,9 @@ export const AreaGuide: CollectionConfig = {
   },
   access: {
     read: () => true,
+  },
+  hooks: {
+    afterChange: [revalidateAreaGuide],
   },
   fields: [
     {
