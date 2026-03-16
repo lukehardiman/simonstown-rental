@@ -156,8 +156,14 @@ export default async function PropertyPage({ params }: Props) {
   }
 
   // ── Gallery images (resolved server-side, passed to client component) ────────
+  // Exclude any gallery item that is the same image as the hero to avoid duplication.
 
+  const heroId = hero?.id
   const galleryImages: LightboxImage[] = (property.gallery ?? [])
+    .filter((item) => {
+      const img = isPropertyImage(item.image) ? item.image : null
+      return !heroId || !img || img.id !== heroId
+    })
     .map((item, i) => {
       const img = isPropertyImage(item.image) ? item.image : null
       const src = img?.sizes?.card?.url ?? img?.url

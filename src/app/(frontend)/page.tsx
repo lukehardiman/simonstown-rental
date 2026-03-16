@@ -1,14 +1,66 @@
 import type { Metadata } from 'next'
+import Image from 'next/image'
 import Link from 'next/link'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
+import { getPropertyBySlug, getAreaGuide, getSiteSettings } from '@/lib/payload'
+import type { Media, PropertyImage, AreaGuide } from '@/payload-types'
 
 export const metadata: Metadata = {
   description:
     "Boutique self-catering holiday rental in historic Simon's Town, South Africa. Mountain views, harbour charm, and the Cape Peninsula on your doorstep.",
 }
 
-export default function HomePage() {
+// ── Type guards ────────────────────────────────────────────────────────────────
+
+function isMedia(v: string | Media | null | undefined): v is Media {
+  return typeof v === 'object' && v !== null
+}
+
+function isPropertyImage(v: string | PropertyImage | null | undefined): v is PropertyImage {
+  return typeof v === 'object' && v !== null
+}
+
+// ── Category labels ────────────────────────────────────────────────────────────
+
+const CATEGORY_LABELS: Record<AreaGuide['category'], string> = {
+  dining:     'Where to Eat',
+  activities: 'Things to Do',
+  nature:     'Nature & Wildlife',
+  beaches:    'Beaches',
+  history:    'History & Culture',
+  shopping:   'Shopping & Markets',
+  daytrips:   'Day Trips',
+  practical:  'Practical Info',
+}
+
+// ── Page ──────────────────────────────────────────────────────────────────────
+
+export default async function HomePage() {
+  const [property, allEntries, siteSettings] = await Promise.all([
+    getPropertyBySlug('thomas-street-house'),
+    getAreaGuide(),
+    getSiteSettings(),
+  ])
+
+  const homepageHero = isMedia(siteSettings?.homepageHeroImage)
+    ? siteSettings.homepageHeroImage
+    : null
+  const propertyHero = isMedia(property?.heroImage) ? property.heroImage : null
+  const hero = homepageHero ?? propertyHero
+
+  // First three gallery images for the property highlight grid
+  const galleryImages = (property?.gallery ?? [])
+    .slice(0, 3)
+    .map((item) => {
+      const img = isPropertyImage(item.image) ? item.image : null
+      const src = img?.sizes?.card?.url ?? img?.url ?? null
+      return src ? { src, alt: item.caption ?? img?.alt ?? property?.title ?? '' } : null
+    })
+    .filter((img): img is { src: string; alt: string } => img !== null)
+
+  const areaEntries = allEntries.slice(0, 3)
+
   return (
     <>
       <Header />
@@ -16,22 +68,21 @@ export default function HomePage() {
       <main>
         {/* ═══════ HERO ═══════ */}
         <section className="relative min-h-[100svh] flex items-end pb-16 md:pb-24 overflow-hidden">
-          {/* Background image — replace src with actual hero */}
           <div className="absolute inset-0 z-0">
-            <div className="absolute inset-0 bg-navy-950/40 z-10" />
-            {/* Placeholder gradient until real image is added */}
-            <div className="absolute inset-0 bg-gradient-to-br from-sea-800 via-navy-900 to-sea-950" />
-            {/* Uncomment when hero image is ready:
-            <Image
-              src="/images/property/hero.jpg"
-              alt="View of Simon's Town harbour from the rental property"
-              fill
-              className="object-cover"
-              priority
-              quality={85}
-              sizes="100vw"
-            />
-            */}
+            <div className="absolute inset-0 bg-navy-950/0 z-10" />
+            {hero?.url ? (
+              <Image
+                src={hero.sizes?.hero?.url ?? hero.url}
+                alt={hero.alt}
+                fill
+                className="object-cover"
+                priority
+                quality={85}
+                sizes="100vw"
+              />
+            ) : (
+              <div className="absolute inset-0 bg-gradient-to-br from-sea-800 via-navy-900 to-sea-950" />
+            )}
           </div>
 
           <div className="container-site relative z-20">
@@ -91,22 +142,54 @@ export default function HomePage() {
         <section className="section-padding bg-white">
           <div className="container-site">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-              {/* Image grid */}
+              {/* Image grid — gallery[0], gallery[1], gallery[2] only */}
               <div className="grid grid-cols-2 gap-4">
                 <div className="col-span-2 aspect-[16/10] rounded-lg bg-stone-200 overflow-hidden relative">
-                  <div className="absolute inset-0 bg-gradient-to-br from-sea-100 to-stone-200 flex items-center justify-center text-stone-400 text-sm">
-                    Property exterior
-                  </div>
+                  {galleryImages[0] ? (
+                    <Image
+                      src={galleryImages[0].src}
+                      alt={galleryImages[0].alt}
+                      fill
+                      className="object-cover"
+                      sizes="(max-width: 1024px) 100vw, 50vw"
+                    />
+                  ) : (
+                    <div className="absolute inset-0 bg-gradient-to-br from-sea-100 to-stone-200 flex items-center justify-center text-stone-400 text-sm">
+                      Property exterior
+                    </div>
+                  )}
                 </div>
+
                 <div className="aspect-square rounded-lg bg-stone-200 overflow-hidden relative">
-                  <div className="absolute inset-0 bg-gradient-to-br from-sea-50 to-stone-200 flex items-center justify-center text-stone-400 text-sm">
-                    Living area
-                  </div>
+                  {galleryImages[1] ? (
+                    <Image
+                      src={galleryImages[1].src}
+                      alt={galleryImages[1].alt}
+                      fill
+                      className="object-cover"
+                      sizes="(max-width: 1024px) 50vw, 25vw"
+                    />
+                  ) : (
+                    <div className="absolute inset-0 bg-gradient-to-br from-sea-50 to-stone-200 flex items-center justify-center text-stone-400 text-sm">
+                      Living area
+                    </div>
+                  )}
                 </div>
+
                 <div className="aspect-square rounded-lg bg-stone-200 overflow-hidden relative">
-                  <div className="absolute inset-0 bg-gradient-to-br from-fynbos-50 to-stone-200 flex items-center justify-center text-stone-400 text-sm">
-                    View
-                  </div>
+                  {galleryImages[2] ? (
+                    <Image
+                      src={galleryImages[2].src}
+                      alt={galleryImages[2].alt}
+                      fill
+                      className="object-cover"
+                      sizes="(max-width: 1024px) 50vw, 25vw"
+                    />
+                  ) : (
+                    <div className="absolute inset-0 bg-gradient-to-br from-fynbos-50 to-stone-200 flex items-center justify-center text-stone-400 text-sm">
+                      View
+                    </div>
+                  )}
                 </div>
               </div>
 
@@ -137,15 +220,21 @@ export default function HomePage() {
                 {/* Key specs */}
                 <div className="grid grid-cols-3 gap-6 mt-8 mb-8 py-6 border-y border-stone-200">
                   <div>
-                    <p className="text-fluid-2xl font-display text-sea-600">3</p>
+                    <p className="text-fluid-2xl font-display text-sea-600">
+                      {property?.details?.bedrooms ?? 3}
+                    </p>
                     <p className="text-sm text-navy-500">Bedrooms</p>
                   </div>
                   <div>
-                    <p className="text-fluid-2xl font-display text-sea-600">2</p>
+                    <p className="text-fluid-2xl font-display text-sea-600">
+                      {property?.details?.bathrooms ?? 2}
+                    </p>
                     <p className="text-sm text-navy-500">Bathrooms</p>
                   </div>
                   <div>
-                    <p className="text-fluid-2xl font-display text-sea-600">6</p>
+                    <p className="text-fluid-2xl font-display text-sea-600">
+                      {property?.details?.sleeps ?? 6}
+                    </p>
                     <p className="text-sm text-navy-500">Sleeps</p>
                   </div>
                 </div>
@@ -173,43 +262,81 @@ export default function HomePage() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {[
-                {
+              {areaEntries.length > 0 ? (
+                areaEntries.map((entry) => {
+                  const img = isMedia(entry.featuredImage) ? entry.featuredImage : null
+                  const imgSrc = img?.sizes?.medium?.url ?? img?.url ?? null
+
+                  return (
+                    <div
+                      key={entry.id}
+                      className="group bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300"
+                    >
+                      <div className="aspect-[4/3] bg-stone-200 relative overflow-hidden">
+                        {imgSrc ? (
+                          <Image
+                            src={imgSrc}
+                            alt={img?.alt ?? entry.title}
+                            fill
+                            className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+                            sizes="(max-width: 768px) 100vw, 33vw"
+                          />
+                        ) : (
+                          <div className="absolute inset-0 bg-gradient-to-br from-sea-100 to-stone-200 flex items-center justify-center text-stone-400 text-sm">
+                            {entry.title}
+                          </div>
+                        )}
+                      </div>
+                      <div className="p-6">
+                        <p className="text-xs font-medium tracking-wide-caps uppercase text-fynbos-500 mb-2">
+                          {CATEGORY_LABELS[entry.category]}
+                        </p>
+                        <h3 className="text-fluid-lg mb-2">{entry.title}</h3>
+                        {entry.excerpt && (
+                          <p className="text-sm text-navy-600 leading-relaxed line-clamp-3">
+                            {entry.excerpt}
+                          </p>
+                        )}
+                      </div>
+                    </div>
+                  )
+                })
+              ) : (
+                // Static fallback if no area guide entries exist yet
+                [{
                   title: 'Boulders Beach',
                   description: 'The famous African penguin colony — a 5-minute walk from the house.',
                   category: 'Nature',
-                },
-                {
+                }, {
                   title: 'Kalk Bay Harbour',
                   description: 'Fresh fish, artisan shops, and the best café culture on the peninsula.',
                   category: 'Dining & Culture',
-                },
-                {
+                }, {
                   title: 'Cape Point',
                   description: 'Where the Atlantic meets the Indian Ocean. Hiking, wildlife, and drama.',
                   category: 'Day Trip',
-                },
-              ].map((item) => (
-                <div
-                  key={item.title}
-                  className="group bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300"
-                >
-                  <div className="aspect-[4/3] bg-stone-200 relative overflow-hidden">
-                    <div className="absolute inset-0 bg-gradient-to-br from-sea-100 to-stone-200 flex items-center justify-center text-stone-400 text-sm">
-                      {item.title}
+                }].map((item) => (
+                  <div
+                    key={item.title}
+                    className="group bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300"
+                  >
+                    <div className="aspect-[4/3] bg-stone-200 relative overflow-hidden">
+                      <div className="absolute inset-0 bg-gradient-to-br from-sea-100 to-stone-200 flex items-center justify-center text-stone-400 text-sm">
+                        {item.title}
+                      </div>
+                    </div>
+                    <div className="p-6">
+                      <p className="text-xs font-medium tracking-wide-caps uppercase text-fynbos-500 mb-2">
+                        {item.category}
+                      </p>
+                      <h3 className="text-fluid-lg mb-2">{item.title}</h3>
+                      <p className="text-sm text-navy-600 leading-relaxed">
+                        {item.description}
+                      </p>
                     </div>
                   </div>
-                  <div className="p-6">
-                    <p className="text-xs font-medium tracking-wide-caps uppercase text-fynbos-500 mb-2">
-                      {item.category}
-                    </p>
-                    <h3 className="text-fluid-lg mb-2">{item.title}</h3>
-                    <p className="text-sm text-navy-600 leading-relaxed">
-                      {item.description}
-                    </p>
-                  </div>
-                </div>
-              ))}
+                ))
+              )}
             </div>
 
             <div className="text-center mt-12">

@@ -905,6 +905,7 @@ export interface SiteSetting {
     instagram?: string | null;
     facebook?: string | null;
   };
+  homepageHeroImage?: (string | null) | Media;
   seo?: {
     defaultTitle?: string | null;
     defaultDescription?: string | null;
@@ -938,6 +939,7 @@ export interface SiteSettingsSelect<T extends boolean = true> {
         instagram?: T;
         facebook?: T;
       };
+  homepageHeroImage?: T;
   seo?:
     | T
     | {

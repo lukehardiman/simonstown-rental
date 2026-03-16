@@ -40,6 +40,12 @@ export const SiteSettings: GlobalConfig = {
       ],
     },
     {
+      name: 'homepageHeroImage',
+      type: 'upload',
+      relationTo: 'media',
+      label: 'Homepage Hero Image',
+    },
+    {
       name: 'seo',
       type: 'group',
       label: 'Default SEO',
