@@ -176,7 +176,7 @@ export default async function PropertyPage({ params }: Props) {
         isFeature: i === 0,
       }
     })
-    .filter((img): img is LightboxImage => img !== null)
+    .filter(Boolean) as LightboxImage[]
 
   // ── Render ─────────────────────────────────────────────────────────────────
 
