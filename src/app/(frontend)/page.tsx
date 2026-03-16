@@ -54,7 +54,7 @@ export default async function HomePage() {
     .slice(0, 3)
     .map((item) => {
       const img = isPropertyImage(item.image) ? item.image : null
-      const src = img?.sizes?.card?.url ?? img?.url ?? null
+      const src = img?.url ?? img?.sizes?.card?.url ?? null
       return src ? { src, alt: item.caption ?? img?.alt ?? property?.title ?? '' } : null
     })
     .filter((img): img is { src: string; alt: string } => img !== null)
@@ -72,7 +72,7 @@ export default async function HomePage() {
             <div className="absolute inset-0 bg-navy-950/0 z-10" />
             {hero?.url ? (
               <Image
-                src={hero.sizes?.large?.url ?? hero.url}
+                src={hero.url}
                 alt={hero.alt}
                 fill
                 className="object-cover"
@@ -265,7 +265,7 @@ export default async function HomePage() {
               {areaEntries.length > 0 ? (
                 areaEntries.map((entry) => {
                   const img = isMedia(entry.featuredImage) ? entry.featuredImage : null
-                  const imgSrc = img?.sizes?.medium?.url ?? img?.url ?? null
+                  const imgSrc = img?.url ?? img?.sizes?.medium?.url ?? null
 
                   return (
                     <div

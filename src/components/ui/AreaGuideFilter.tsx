@@ -93,7 +93,7 @@ export function AreaGuideFilter({ entries }: { entries: AreaGuide[] }) {
 
 function EntryCard({ entry }: { entry: AreaGuide }) {
   const image = isMedia(entry.featuredImage) ? entry.featuredImage : null
-  const imgSrc = image?.sizes?.medium?.url ?? image?.url ?? null
+  const imgSrc = image?.url ?? image?.sizes?.medium?.url ?? null
 
   return (
     <article className="group bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300 flex flex-col">

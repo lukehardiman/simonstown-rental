@@ -112,7 +112,7 @@ export default async function PropertyPage({ params }: Props) {
   const galleryImageUrls = (property.gallery ?? [])
     .map((g) => {
       const img = isPropertyImage(g.image) ? g.image : null
-      return img?.sizes?.hero?.url ?? img?.url ?? null
+      return img?.url ?? img?.sizes?.hero?.url ?? null
     })
     .filter((url): url is string => Boolean(url))
 
@@ -166,11 +166,11 @@ export default async function PropertyPage({ params }: Props) {
     })
     .map((item, i) => {
       const img = isPropertyImage(item.image) ? item.image : null
-      const src = img?.sizes?.card?.url ?? img?.url
+      const src = img?.url ?? img?.sizes?.card?.url
       if (!src) return null
       return {
         src,
-        fullSrc: img?.sizes?.hero?.url ?? src,
+        fullSrc: img?.url ?? img?.sizes?.hero?.url ?? src,
         alt: item.caption ?? img?.alt ?? property.title,
         caption: item.caption ?? undefined,
         isFeature: i === 0,
@@ -196,7 +196,7 @@ export default async function PropertyPage({ params }: Props) {
           <div className="absolute inset-0 z-0">
             {hero?.url ? (
               <Image
-                src={hero.sizes?.large?.url ?? hero.url}
+                src={hero.url}
                 alt={hero.alt}
                 fill
                 className="object-cover"
