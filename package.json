@@ -16,7 +16,8 @@
     "test": "pnpm run test:int && pnpm run test:e2e",
     "test:e2e": "cross-env NODE_OPTIONS=\"--no-deprecation --import=tsx/esm\" playwright test --config=playwright.config.ts",
     "test:int": "cross-env NODE_OPTIONS=--no-deprecation vitest run --config ./vitest.config.mts",
-    "seed:gallery": "cross-env NODE_OPTIONS=--no-deprecation tsx src/lib/seed-gallery.ts"
+    "seed:gallery": "cross-env NODE_OPTIONS=--no-deprecation tsx src/lib/seed-gallery.ts",
+    "seed:production": "cross-env NODE_OPTIONS=--no-deprecation tsx src/lib/seed-production.ts"
   },
   "dependencies": {
     "@payloadcms/db-mongodb": "3.79.0",
