@@ -243,7 +243,7 @@ export default async function PropertyPage({ params }: Props) {
                 />
               )}
               <div className="ml-auto flex-shrink-0">
-                <Link href="/contact" className="btn-primary text-sm whitespace-nowrap">
+                <Link href={`/contact?property=${property.slug}`} className="btn-primary text-sm whitespace-nowrap">
                   Make an Enquiry
                 </Link>
               </div>
