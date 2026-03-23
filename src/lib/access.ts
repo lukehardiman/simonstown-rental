@@ -1,4 +1,6 @@
 import type { Access } from 'payload'
 
-/** Any authenticated user may perform this operation. */
-export const isLoggedIn: Access = ({ req: { user } }) => Boolean(user)
+export const isLoggedIn: Access = ({ req: { user } }) => {
+  console.log('[ACCESS] isLoggedIn called, user:', user ? user.email : 'NO USER', 'result:', Boolean(user))
+  return Boolean(user)
+}
