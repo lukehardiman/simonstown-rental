@@ -25,7 +25,7 @@ export const viewport: Viewport = {
 }
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://simonstownrental.com'),
+  metadataBase: new URL('https://simonstownrental.com'),
   title: {
     default: "Simon's Town Rental — Holiday Accommodation, Cape Peninsula",
     template: "%s — Simon's Town Rental",
