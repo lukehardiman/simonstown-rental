@@ -1,7 +1,11 @@
 import Link from 'next/link'
+import { getSiteSettings } from '@/lib/payload'
+import { WhatsAppButton } from '@/components/ui/WhatsAppButton'
 
-export function Footer() {
+export async function Footer() {
   const currentYear = new Date().getFullYear()
+  const siteSettings = await getSiteSettings()
+  const whatsapp = siteSettings?.contact?.whatsapp ?? null
 
   return (
     <footer className="bg-navy-950 text-white/80 mt-auto">
@@ -59,15 +63,14 @@ export function Footer() {
               >
                 info@simonstownrental.com
               </a>
-              {/* WhatsApp link — update number when ready */}
-              <a
-                href="https://wa.me/"
-                className="hover:text-sea-300 transition-colors"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                WhatsApp
-              </a>
+              {whatsapp && (
+                <WhatsAppButton
+                  number={whatsapp}
+                  className="text-left hover:text-sea-300 transition-colors cursor-pointer bg-transparent border-0 p-0 text-sm text-white/80"
+                >
+                  WhatsApp
+                </WhatsAppButton>
+              )}
             </div>
           </div>
         </div>

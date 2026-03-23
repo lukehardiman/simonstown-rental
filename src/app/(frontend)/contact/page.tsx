@@ -5,6 +5,8 @@ import React from 'react'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { EnquiryForm } from '@/components/forms/EnquiryForm'
+import { WhatsAppButton } from '@/components/ui/WhatsAppButton'
+import { getSiteSettings } from '@/lib/payload'
 
 // ── Metadata ──────────────────────────────────────────────────────────────────
 
@@ -22,7 +24,11 @@ type Props = {
 }
 
 export default async function ContactPage({ searchParams }: Props) {
-  const { property } = await searchParams
+  const [{ property }, siteSettings] = await Promise.all([
+    searchParams,
+    getSiteSettings(),
+  ])
+  const whatsapp = siteSettings?.contact?.whatsapp ?? null
 
   return (
     <>
@@ -101,13 +107,22 @@ export default async function ContactPage({ searchParams }: Props) {
                         icon={<EmailIcon />}
                       />
 
-                      <ContactDetail
-                        label="WhatsApp"
-                        href="https://wa.me/"
-                        display="Message us on WhatsApp"
-                        icon={<WhatsAppIcon />}
-                        external
-                      />
+                      {whatsapp && (
+                        <div className="flex items-start gap-3">
+                          <span className="mt-0.5 text-sea-500 flex-shrink-0"><WhatsAppIcon /></span>
+                          <div>
+                            <p className="text-xs text-navy-400 uppercase tracking-wide-caps font-medium mb-0.5">
+                              WhatsApp
+                            </p>
+                            <WhatsAppButton
+                              number={whatsapp}
+                              className="text-sm font-medium text-navy-800 hover:text-sea-600 transition-colors cursor-pointer bg-transparent border-0 p-0"
+                            >
+                              Message us on WhatsApp
+                            </WhatsAppButton>
+                          </div>
+                        </div>
+                      )}
 
                     </div>
                   </div>
