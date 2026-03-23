@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from 'next'
 import { Playfair_Display, Libre_Franklin } from 'next/font/google'
+import { GoogleAnalytics } from '@next/third-parties/google'
 import React from 'react'
 
 import '@/styles/globals.css'
@@ -52,6 +53,9 @@ export default function FrontendLayout({ children }: { children: React.ReactNode
       <body>
         {children}
       </body>
+      {process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID && (
+        <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID} />
+      )}
     </html>
   )
 }

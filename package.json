@@ -20,6 +20,7 @@
     "seed:production": "cross-env NODE_OPTIONS=--no-deprecation tsx src/lib/seed-production.ts"
   },
   "dependencies": {
+    "@next/third-parties": "^16.2.1",
     "@payloadcms/db-mongodb": "3.79.0",
     "@payloadcms/next": "3.79.0",
     "@payloadcms/plugin-seo": "^3.79.0",
