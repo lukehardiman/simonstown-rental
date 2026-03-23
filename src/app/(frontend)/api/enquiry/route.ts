@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createEnquiry } from '@/lib/payload'
+import { sendEnquiryNotification } from '@/lib/email/send-enquiry-notification'
 
 export async function POST(req: NextRequest) {
   try {
@@ -25,6 +26,8 @@ export async function POST(req: NextRequest) {
       property: property || undefined,
       source: 'website',
     })
+
+    void sendEnquiryNotification({ name, email, phone, arrivalDate, departureDate, guests, message, property })
 
     return NextResponse.json({ success: true }, { status: 201 })
   } catch (err) {
