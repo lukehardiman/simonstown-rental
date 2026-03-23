@@ -80,6 +80,56 @@ function buildEnquiryHtml(data: EnquiryNotificationProps): string {
 </html>`
 }
 
+function buildGuestConfirmationHtml(name: string): string {
+  return `<!DOCTYPE html>
+<html>
+<head></head>
+<body style="font-family:Georgia,serif;background:#f8fafc;margin:0;padding:0;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background:#f8fafc;padding:40px 0;">
+    <tr>
+      <td align="center">
+        <table width="600" cellpadding="0" cellspacing="0" style="background:#ffffff;border-radius:8px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,0.08);">
+          <tr>
+            <td style="background:#0f2942;padding:28px 32px;color:#ffffff;">
+              <p style="margin:0;font-size:13px;opacity:0.7;letter-spacing:0.08em;text-transform:uppercase;">Simon's Town Rental</p>
+              <h1 style="margin:6px 0 0;font-size:22px;font-weight:400;letter-spacing:-0.01em;">Thank you for getting in touch</h1>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:32px 32px 8px;color:#334155;font-size:16px;line-height:1.7;">
+              <p style="margin:0 0 16px;">Dear ${esc(name)},</p>
+              <p style="margin:0 0 16px;">Thank you for your enquiry about Thomas Street House. We've received your message and will get back to you within 24 hours.</p>
+              <p style="margin:0 0 16px;">In the meantime, if you have any urgent questions you're welcome to reach us at <a href="mailto:info@simonstownrental.com" style="color:#0f2942;">info@simonstownrental.com</a> or via WhatsApp — we're usually pretty quick to respond.</p>
+              <p style="margin:0 0 16px;">We look forward to hearing more about your stay.</p>
+              <p style="margin:0;">Warm regards,<br><strong>The Hardiman Family</strong><br><span style="color:#64748b;font-size:14px;">Simon's Town Rental</span></p>
+            </td>
+          </tr>
+          <tr>
+            <td style="border-top:1px solid #e2e8f0;padding:16px 32px;color:#94a3b8;font-size:12px;">
+              Thomas Street House &middot; Simon's Town, Cape Peninsula, South Africa
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>`
+}
+
+export async function sendGuestConfirmation(data: Pick<EnquiryNotificationProps, 'name' | 'email'>): Promise<void> {
+  try {
+    await resend.emails.send({
+      from: "Simon's Town Rental <info@simonstownrental.com>",
+      to: data.email,
+      subject: "Thank you for your enquiry — Simon's Town Rental",
+      html: buildGuestConfirmationHtml(data.name),
+    })
+  } catch (err) {
+    console.error('[email] Failed to send guest confirmation:', err)
+  }
+}
+
 export async function sendEnquiryNotification(data: EnquiryNotificationProps): Promise<void> {
   try {
     const recipients = (process.env.ENQUIRY_NOTIFICATION_EMAILS ?? '')
