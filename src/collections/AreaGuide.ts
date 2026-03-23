@@ -1,5 +1,6 @@
 import type { CollectionConfig } from 'payload'
 import { revalidateAreaGuide } from '@/hooks/revalidate'
+import { isLoggedIn } from '@/lib/access'
 
 export const AreaGuide: CollectionConfig = {
   slug: 'area-guide',
@@ -14,6 +15,9 @@ export const AreaGuide: CollectionConfig = {
   },
   access: {
     read: () => true,
+    create: isLoggedIn,
+    update: isLoggedIn,
+    delete: isLoggedIn,
   },
   hooks: {
     afterChange: [revalidateAreaGuide],

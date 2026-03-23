@@ -1,5 +1,6 @@
 import type { GlobalConfig } from 'payload'
 import { revalidateSiteSettings } from '@/hooks/revalidate'
+import { isLoggedIn } from '@/lib/access'
 
 export const SiteSettings: GlobalConfig = {
   slug: 'site-settings',
@@ -9,6 +10,7 @@ export const SiteSettings: GlobalConfig = {
   },
   access: {
     read: () => true,
+    update: isLoggedIn,
   },
   hooks: {
     afterChange: [revalidateSiteSettings],

@@ -1,5 +1,6 @@
 import type { CollectionConfig } from 'payload'
 import { revalidatePage } from '@/hooks/revalidate'
+import { isLoggedIn } from '@/lib/access'
 
 export const Pages: CollectionConfig = {
   slug: 'pages',
@@ -14,6 +15,9 @@ export const Pages: CollectionConfig = {
   },
   access: {
     read: () => true,
+    create: isLoggedIn,
+    update: isLoggedIn,
+    delete: isLoggedIn,
   },
   hooks: {
     afterChange: [revalidatePage],

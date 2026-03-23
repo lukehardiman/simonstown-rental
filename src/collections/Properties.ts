@@ -1,5 +1,6 @@
 import type { CollectionConfig } from 'payload'
 import { revalidateProperty } from '@/hooks/revalidate'
+import { isLoggedIn } from '@/lib/access'
 
 export const Properties: CollectionConfig = {
   slug: 'properties',
@@ -14,6 +15,9 @@ export const Properties: CollectionConfig = {
   },
   access: {
     read: () => true,
+    create: isLoggedIn,
+    update: isLoggedIn,
+    delete: isLoggedIn,
   },
   hooks: {
     afterChange: [revalidateProperty],

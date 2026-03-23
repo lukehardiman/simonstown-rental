@@ -1,4 +1,5 @@
 import type { CollectionConfig } from 'payload'
+import { isLoggedIn } from '@/lib/access'
 
 export const Enquiries: CollectionConfig = {
   slug: 'enquiries',
@@ -12,8 +13,10 @@ export const Enquiries: CollectionConfig = {
     group: 'Enquiries',
   },
   access: {
-    read: ({ req: { user } }) => Boolean(user),
-    create: () => true, // Public can submit
+    read: isLoggedIn,
+    create: () => true, // Public can submit via the enquiry form
+    update: isLoggedIn,
+    delete: isLoggedIn,
   },
   fields: [
     {
