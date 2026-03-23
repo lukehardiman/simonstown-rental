@@ -9,6 +9,7 @@ export const metadata: Metadata = {
   title: "History of Simon's Town — A Naval Town Shaped by the Sea",
   description:
     "Simon's Town has one of the richest histories in South Africa — Dutch traders, British admirals, apartheid, and a community that endured. Explore 300+ years of the Cape Peninsula's most storied harbour town.",
+  alternates: { canonical: '/history' },
   openGraph: {
     title: "History of Simon's Town — A Naval Town Shaped by the Sea",
     description:

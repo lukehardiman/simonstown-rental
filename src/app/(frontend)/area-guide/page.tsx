@@ -8,6 +8,7 @@ export const metadata: Metadata = {
   title: "Area Guide — Simon's Town & the South Peninsula",
   description:
     "Our family's guide to the best of Simon's Town and the Cape South Peninsula — from Boulders Beach penguins to Kalk Bay cafés, Cape Point hikes, and hidden local gems.",
+  alternates: { canonical: '/area-guide' },
   openGraph: {
     title: "Area Guide — Simon's Town & the South Peninsula",
     description:

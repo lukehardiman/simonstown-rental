@@ -9,6 +9,7 @@ export const metadata: Metadata = {
   title: "The Hardiman Family — Our Connection to Simon's Town",
   description:
     "The Hardiman family's connection to Simon's Town stretches across generations. This is the story of how a place becomes part of a family, and why we open our home to guests.",
+  alternates: { canonical: '/family' },
   openGraph: {
     title: "The Hardiman Family — Our Connection to Simon's Town",
     description:

@@ -12,6 +12,7 @@ export const metadata: Metadata = {
   title: 'Contact & Booking',
   description:
     "Enquire about availability and rates for our self-catering holiday rental in Simon's Town, Cape Peninsula. We typically respond within 24 hours.",
+  alternates: { canonical: '/contact' },
 }
 
 // ── Page ──────────────────────────────────────────────────────────────────────

@@ -9,6 +9,7 @@ import type { Media, PropertyImage, AreaGuide } from '@/payload-types'
 export const metadata: Metadata = {
   description:
     "Boutique self-catering holiday rental in historic Simon's Town, South Africa. Mountain views, harbour charm, and the Cape Peninsula on your doorstep.",
+  alternates: { canonical: '/' },
 }
 
 // ── Type guards ────────────────────────────────────────────────────────────────
