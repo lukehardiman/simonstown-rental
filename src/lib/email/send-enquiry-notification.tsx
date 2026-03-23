@@ -1,4 +1,3 @@
-import { createElement } from 'react'
 import { resend } from '@/lib/resend'
 import { EnquiryNotification, type EnquiryNotificationProps } from './enquiry-notification'
 
@@ -19,7 +18,7 @@ export async function sendEnquiryNotification(data: EnquiryNotificationProps): P
       to: recipients,
       replyTo: `${data.name} <${data.email}>`,
       subject: `New enquiry from ${data.name}`,
-      react: createElement(EnquiryNotification, data),
+      react: <EnquiryNotification {...data} />,
     })
   } catch (err) {
     console.error('[email] Failed to send enquiry notification:', err)
